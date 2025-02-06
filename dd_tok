@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Check if correct number of arguments is provided
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <file_with_domains> <domain>"
+    exit 1
+fi
+
+FILE="$1"
+DOMAIN="$2"
+TLD="${DOMAIN##*.}"  # Extract top-level domain
+DOMAIN_NAME="${DOMAIN%%.*}"  # Extract main domain
+
+# Extract tokens, filter out domain and TLD, and save to tokens.txt
+cat "$FILE" | tok -delim-exceptions _ -min 1 -max 30 \
+    | sort -u \
+    | grep -v "$DOMAIN_NAME" \
+    | grep -v "$TLD" \
+    | tee tokens.txt
