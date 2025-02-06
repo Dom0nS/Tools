@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Check if an argument is provided
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <file_with_domains>"
+    exit 1
+fi
+
+FILE="$1"
+
+# Resolve domains using puredns and save valid ones to a file
+puredns resolve "$FILE" --write valid_domains.txt

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Check if an argument is provided
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <domain>"
+    exit 1
+fi
+
+DOMAIN="$1"
+API_KEY="***" # Ensure you have a valid API key
+
+# Fetch subdomains from API and save to a file
+curl -H "x-api-key: $API_KEY" "https://api.subbdom.com/v1/search?z=$DOMAIN" | tr -d '[]" ' | tr ',' '\n' | tee -a umbrella.txt
+
+# Run subfinder and save results to a file
+subfinder -d "$DOMAIN" -all | tee -a subfinder.txt
+
+# Filter and merge results
+cat umbrella.txt | anew subfinder.txt
+
+# Remove temporary file
+rm -f umbrella.txt
