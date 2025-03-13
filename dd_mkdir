@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Check if two arguments are provided
+if [ "$#" -ne 2 ]; then
+    echo "Usage: dd_mkdir <company_name> <domain_name>"
+    exit 1
+fi
+
+# Get arguments
+COMPANY="$1"
+DOMAIN="$2"
+
+# Define paths
+RECON_DIR="$HOME/recon"
+COMPANY_DIR="$RECON_DIR/$COMPANY"
+DOMAIN_FORMAT="${DOMAIN//./-}"  # Replace dots with hyphens
+DOMAIN_DIR="$COMPANY_DIR/$DOMAIN_FORMAT"
+
+# Create company directory if it doesn't exist
+if [ ! -d "$COMPANY_DIR" ]; then
+    mkdir -p "$COMPANY_DIR"
+    echo "Created directory: $COMPANY_DIR"
+fi
+
+# Create domain directory if it doesn't exist
+if [ ! -d "$DOMAIN_DIR" ]; then
+    mkdir -p "$DOMAIN_DIR"
+    echo "Created directory: $DOMAIN_DIR"
+fi
+
+# Create subdirectories
+for SUBDIR in subs fuzz waymore httpx; do
+    if [ ! -d "$DOMAIN_DIR/$SUBDIR" ]; then
+        mkdir -p "$DOMAIN_DIR/$SUBDIR"
+        echo "Created directory: $DOMAIN_DIR/$SUBDIR"
+    fi
+done
