@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Check if the correct number of arguments is provided
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <domains_file> <wildcards_file>"
+    exit 1
+fi
+
+# Input files
+domains_file="$1"
+wildcards_file="$2"
+
+# Temporary output file
+temp_file="filtered_domains.txt"
+
+# Create a copy of the original domains file to modify in place
+cp "$domains_file" "$temp_file"
+
+# Temporary file for grep filtering
+temp_grep="temp_grep.txt"
+
+# Iterate through wildcard domains
+while IFS= read -r wildcard; do
+    # Remove domains matching the wildcard pattern
+    grep -vE "\.$wildcard$" "$temp_file" > "$temp_grep"
+    mv "$temp_grep" "$temp_file"
+done < "$wildcards_file"
+
+# Overwrite the original domains file with the filtered results
+mv "$temp_file" "$domains_file"
+
+echo "Domains matching wildcard patterns have been removed."
