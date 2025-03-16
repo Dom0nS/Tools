@@ -9,7 +9,7 @@ fi
 FILE="$1"
 
 # Resolve domains using puredns and save valid ones to a file
-puredns resolve "$FILE" --write valid_domains.txt
+puredns resolve "$FILE" --write valid_domains.txt --write-wildcards valid_wildcard_domains.txt
 
 # Sort the output file alphabetically
 sort -o valid_domains.txt valid_domains.txt
