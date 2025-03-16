@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Check if the correct number of arguments is provided
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <subdomains_file>"
+    exit 1
+fi
+
+# Input file
+subdomains_file="$1"
+
+# Output files
+live_file="live.txt"
+dead_file="dead.txt"
+
+# Clear previous results
+> "$live_file"
+> "$dead_file"
+
+# Iterate through the subdomains
+while IFS= read -r subdomain; do
+    if host "$subdomain" > /dev/null 2>&1; then
+        echo "$subdomain" >> "$live_file"
+    else
+        echo "$subdomain" >> "$dead_file"
+    fi
+done < "$subdomains_file"
+
+echo "Live and dead subdomains have been categorized."
